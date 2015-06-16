@@ -34,25 +34,13 @@
     
     [self setupPageViewController];
     
-    NSLog(@"%lu", (unsigned long)_pageViewController.gestureRecognizers.count);
-//    UIPanGestureRecognizer *panGestRec = [[UIPanGestureRecognizer alloc] initWithTarget:pagingNavbar action:@selector(animatePaging:)];
-    
-//    UIPanGestureRecognizer *panGestRec = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(animatePaging:)];
-//    [self.view addGestureRecognizer:panGestRec];
-    
     // Because Apple doesn't provide access to UIPanGestureRecognizer from UIPageViewController when transition style is Scroll
     for (UIView *view in _pageViewController.view.subviews) {
         if ([view isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)view;
             scrollView.delegate = _pagingNavbar;
-//            UIPanGestureRecognizer *panGestureRecognizer = scrollView.panGestureRecognizer;
-//            [panGestureRecognizer addTarget:_pagingNavbar action:@selector(animatePaging:)];
         }
     }
-}
-
-- (void)animatePaging:(UIPanGestureRecognizer *)panGestureRecognizer {
-    NSLog(@"animateViewController");
 }
 
 #pragma mark - setupViewControllers

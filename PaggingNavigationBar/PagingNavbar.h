@@ -22,6 +22,4 @@
 
 - (instancetype)initWithTitles:(NSArray *)titles;
 
-- (void)animatePaging:(UIPanGestureRecognizer *)panGestureRecognizer;
-
 @end

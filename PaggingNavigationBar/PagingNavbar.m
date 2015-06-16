@@ -75,12 +75,6 @@ static const CGFloat PagingNavbarDefaultOffset = 100.f;
 
 #pragma mark - Animate
 
-- (void)animatePaging:(UIPanGestureRecognizer *)panGestureRecognizer {
-    NSLog(@"animate");
-//    [self setContentOffset:[panGestureRecognizer locationInView:self]];
-//    [self setContentOffset:CGPointMake(100, 100)];
-}
-
 - (void)setContentOffset:(CGPoint)contentOffset {
     _contentOffset = contentOffset;
     
@@ -94,10 +88,6 @@ static const CGFloat PagingNavbarDefaultOffset = 100.f;
             titleLabelFrame.origin.x = PagingNavbarDefaultOffset * (idx - xOffset / _width - _currentPage + 1);
             titleLabel.frame = titleLabelFrame;
             NSLog(@"origin.x = %f", titleLabelFrame.origin.x);
-            
-//            titleLabelFrame.origin.x = (idx * (kXHiPad ? 240 : _width / kXHRadie)) - xOffset / kXHRadie + test;
-            
-//            titleLabelFrame.origin.x = (idx * (kXHiPad ? 240 : 100)) - 100 * xOffset / _width + test;
             
             // alpha
             CGFloat alpha;
@@ -115,42 +105,9 @@ static const CGFloat PagingNavbarDefaultOffset = 100.f;
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"scrollViewDidScroll offset = %f", scrollView.contentOffset.x);
+    NSLog(@"offset = %f", scrollView.contentOffset.x);
     [self setContentOffset:scrollView.contentOffset];
-//    CGFloat xOffset = scrollView.contentOffset.x;
-//
-//    NSLog(@"scrollViewDidScroll offset = %f", xOffset);
-//    
-//    CGFloat wBounds = self.bounds.size.width;
-//    CGFloat hBounds = self.bounds.size.height;
-//    CGFloat widthOffset = wBounds / 100;
-//    CGFloat offsetPosition = 0 - xOffset/widthOffset;
-//
-////    ((UILabel *)_titleLabels[0]).frame = CGRectMake(offsetPosition, 8, wBounds, 20);
-//    UILabel *label = [_titleLabels objectAtIndex:0];
-//    label.frame = CGRectMake(0, 0, 10, 10);
-//    ((UILabel *)_titleLabels[1]).frame = CGRectMake(offsetPosition + 100, 8, wBounds, 20);
-//    ((UILabel *)_titleLabels[2]).frame = CGRectMake(offsetPosition + 200, 8, wBounds, 20);
-//    
-//    ((UILabel *)_titleLabels[0]).alpha = 1 - xOffset / wBounds;
-//    
-//    if (xOffset <= wBounds) {
-//        ((UILabel *)_titleLabels[1]).alpha = xOffset / wBounds;
-//    } else {
-//        ((UILabel *)_titleLabels[1]).alpha = 1 - (xOffset - wBounds) / wBounds;
-//    }
-//    ((UILabel *)_titleLabels[2]).alpha = (xOffset - wBounds) / wBounds;
 }
 
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//    CGFloat xOffset = scrollView.contentOffset.x;
-//    if (xOffset < 1.0) {
-//        self.currentPage = 0;
-//    } else if (xOffset < self.bounds.size.width + 1) {
-//        self.currentPage = 1;
-//    } else {
-//        self.currentPage = 2;
-//    }
-//}
 
 @end
