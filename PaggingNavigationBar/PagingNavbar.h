@@ -9,7 +9,11 @@
 #import <UIKit/UIKit.h>
 
 /**
- * Add as subview to your NavigationBar
+ * Rules:
+ * 1. Use only initWithTitles:pageViewController: initializer
+ * 2. Add as subview to your NavigationBar
+ * 3. Set currentPage on pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:
+ *    method of your UIPageViewControllerDelegate
  */
 @interface PagingNavbar : UIView <UIScrollViewDelegate>
 
@@ -27,6 +31,10 @@
 
 @property (nonatomic, readonly) UIPageControl *pageControl;
 
+
+/**
+ * Use only this initializer
+ */
 - (instancetype)initWithTitles:(NSArray *)titles
             pageViewController:(UIPageViewController *)pageViewController;
 

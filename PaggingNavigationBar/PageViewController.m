@@ -32,9 +32,9 @@
     
     NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple", @"Gray", @"Orange", @"Cyan", @"Brown", @"Blue"];
     
+    // Setup PagingNavbar
     _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles
                                       pageViewController:_pageViewController];
-    
     [self.navigationController.navigationBar addSubview:_pagingNavbar];
 }
 
@@ -57,7 +57,6 @@
 #pragma mark - setupPageViewController
 
 - (void)setupPageViewController {
-//    NSDictionary* options = @{UIPageViewControllerOptionInterPageSpacingKey : [NSNumber numberWithFloat:10.0f]};
     _pageViewController = [[UIPageViewController alloc]
                            initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll
                            navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
@@ -79,7 +78,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - UIPageViewControllerDataSource
@@ -121,6 +119,7 @@
 
 #pragma mark - UIPageViewControllerDelegate
 
+// Set currentPage for PagingNavbar
 - (void)pageViewController:(UIPageViewController *)pageViewController
         didFinishAnimating:(BOOL)finished
    previousViewControllers:(NSArray *)previousViewControllers
