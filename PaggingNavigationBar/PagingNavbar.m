@@ -8,14 +8,16 @@
 
 #import "PagingNavbar.h"
 
-// Расстояние между центром NavigationBar и точкой из которой будет появлятся надписать
-// Расстояние между Label'ами
+// Расстояние между центром NavigationBar и точкой из которой будет появлятся Label
+// Offset between NavigationBar center and begin present point of Label
+// Space between titleLabels
 static const CGFloat PagingNavbarDefaultHorOffset = 100.f;
 
 @interface PagingNavbar ()
 
 @property (nonatomic, assign) CGFloat screenWidth;
-@property (nonatomic, weak) UIPageViewController *pageViewController;
+
+@property (nonatomic, weak) NSArray *contentViewControllers;
 
 @end
 
@@ -38,10 +40,30 @@ static const CGFloat PagingNavbarDefaultHorOffset = 100.f;
         
         [self setupPageControl];
         
-        [self setupScrollViewDelegate];
+        [self setupScrollViewDelegateForPageViewController:pageViewController];
     }
     return self;
 }
+
+//- (instancetype)initWithTitles:(NSArray *)titles
+//            pageViewController:(UIPageViewController *)pageViewController
+//        contentViewControllers:(NSArray *)contentViewControllers {
+//    if (self = [super init]) {
+//        _titles = titles;
+//        
+//        _contentViewControllers = contentViewControllers;
+//        pageViewController.delegate = self;
+//        
+//        _screenWidth = [[UIScreen mainScreen] bounds].size.width;
+//        
+//        [self setupTitleLabels];
+//        
+//        [self setupPageControl];
+//        
+//        [self setupScrollViewDelegateForPageViewController:pageViewController];
+//    }
+//    return self;
+//}
 
 - (void)setupTitleLabels {
     _titleLabels = [NSMutableArray array];
@@ -67,8 +89,8 @@ static const CGFloat PagingNavbarDefaultHorOffset = 100.f;
     [self addSubview:_pageControl];
 }
 
-- (void)setupScrollViewDelegate {
-    for (UIView *view in _pageViewController.view.subviews) {
+- (void)setupScrollViewDelegateForPageViewController:(UIPageViewController *)pageViewController {
+    for (UIView *view in pageViewController.view.subviews) {
         if ([view isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)view;
             scrollView.delegate = self;
@@ -118,5 +140,17 @@ static const CGFloat PagingNavbarDefaultHorOffset = 100.f;
     [self setContentOffset:scrollView.contentOffset];
 }
 
+//#pragma mark - UIPageViewControllerDelegate
+//
+//- (void)pageViewController:(UIPageViewController *)pageViewController
+//        didFinishAnimating:(BOOL)finished
+//   previousViewControllers:(NSArray *)previousViewControllers
+//       transitionCompleted:(BOOL)completed {
+//    if (completed) {
+//        UIViewController *currentController =
+//        (UIViewController *)[pageViewController.viewControllers firstObject];
+//        self.currentPage = [_contentViewControllers indexOfObject:currentController];
+//    }
+//}
 
 @end

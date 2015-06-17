@@ -26,22 +26,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple"];
-    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles
-                                      pageViewController:_pageViewController];
-    [self.navigationController.navigationBar addSubview:_pagingNavbar];
-    
     [self setupViewControllers];
     
     [self setupPageViewController];
     
-//    // Because Apple doesn't provide access to UIPanGestureRecognizer from UIPageViewController when transition style is Scroll
-//    for (UIView *view in _pageViewController.view.subviews) {
-//        if ([view isKindOfClass:[UIScrollView class]]) {
-//            UIScrollView *scrollView = (UIScrollView *)view;
-//            scrollView.delegate = _pagingNavbar;
-//        }
-//    }
+    NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple", @"Gray", @"Orange", @"Cyan", @"Brown", @"Blue"];
+    
+    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles
+                                      pageViewController:_pageViewController];
+    
+    [self.navigationController.navigationBar addSubview:_pagingNavbar];
 }
 
 #pragma mark - setupViewControllers
@@ -51,7 +45,12 @@
                                 [[PageContentViewController alloc] initWithColor:[UIColor redColor]],
                                 [[PageContentViewController alloc] initWithColor:[UIColor yellowColor]],
                                 [[PageContentViewController alloc] initWithColor:[UIColor greenColor]],
-                                [[PageContentViewController alloc] initWithColor:[UIColor purpleColor]]
+                                [[PageContentViewController alloc] initWithColor:[UIColor purpleColor]],
+                                [[PageContentViewController alloc] initWithColor:[UIColor lightGrayColor]],
+                                [[PageContentViewController alloc] initWithColor:[UIColor orangeColor]],
+                                [[PageContentViewController alloc] initWithColor:[UIColor cyanColor]],
+                                [[PageContentViewController alloc] initWithColor:[UIColor brownColor]],
+                                [[PageContentViewController alloc] initWithColor:[UIColor blueColor]]
                                ];
 }
 
@@ -90,22 +89,11 @@
     
     NSUInteger index = [_contentViewControllers indexOfObject:(PageContentViewController *)viewController];
     
-    NSLog(@"Before 1 %lu", (unsigned long) index);
-    
-//    _pagingNavbar.currentPage = index;
-    
     if (index == 0 || index == NSNotFound) {
-        NSLog(@"Before 2 %lu", (unsigned long) index);
         return nil;
     }
     
-    NSLog(@"Before 3 %lu", (unsigned long) index);
-    
     index--;
-    
-//    _pagingNavbar.currentPage = index;
-    
-    NSLog(@"Before 4 %lu", (unsigned long) index);
     
     return [self viewControllerAtIndex:index];
 }
@@ -114,29 +102,17 @@
        viewControllerAfterViewController:(UIViewController *)viewController {
 
     NSUInteger index = [_contentViewControllers indexOfObject:(PageContentViewController *)viewController];
-    
-    NSLog(@"After 1 %lu", (unsigned long) index);
-    
-//    _pagingNavbar.currentPage = index;
-    
+
     if (index + 1 == _contentViewControllers.count || index == NSNotFound) {
-        NSLog(@"After 2 %lu", (unsigned long) index);
         return nil;
     }
     
-    NSLog(@"After 3 %lu", (unsigned long) index);
-    
     index++;
-    
-//    _pagingNavbar.currentPage = index;
-    
-    NSLog(@"After 4 %lu", (unsigned long) index);
     
     return [self viewControllerAtIndex:index];
 }
 
 - (PageContentViewController *)viewControllerAtIndex:(NSUInteger)index {
-//    _pagingNavbar.currentPage = index;
     if (_contentViewControllers.count == 0 || index >= _contentViewControllers.count) {
         return nil;
     }
@@ -150,8 +126,9 @@
    previousViewControllers:(NSArray *)previousViewControllers
        transitionCompleted:(BOOL)completed {
     if (completed) {
-        PageContentViewController *newController = (PageContentViewController *)[self.pageViewController.viewControllers firstObject];
-        _pagingNavbar.currentPage = [_contentViewControllers indexOfObject:newController];
+        PageContentViewController *currentController =
+            (PageContentViewController *)[self.pageViewController.viewControllers firstObject];
+        _pagingNavbar.currentPage = [_contentViewControllers indexOfObject:currentController];
     }
 }
 

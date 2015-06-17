@@ -8,17 +8,24 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ * Add as subview to your NavigationBar
+ */
 @interface PagingNavbar : UIView <UIScrollViewDelegate>
+
+/**
+ * Need to set on pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:
+ * method of your UIPageViewControllerDelegate
+ */
+@property (nonatomic, assign) NSInteger currentPage;
 
 @property (nonatomic, strong) NSArray *titles;
 
-@property (nonatomic, assign) NSInteger currentPage;
-
-@property (nonatomic, strong) NSMutableArray *titleLabels;
-
-@property (nonatomic, strong) UIPageControl *pageControl;
-
 @property (nonatomic, assign) CGPoint contentOffset;
+
+@property (nonatomic, readonly) NSMutableArray *titleLabels;
+
+@property (nonatomic, readonly) UIPageControl *pageControl;
 
 - (instancetype)initWithTitles:(NSArray *)titles
             pageViewController:(UIPageViewController *)pageViewController;

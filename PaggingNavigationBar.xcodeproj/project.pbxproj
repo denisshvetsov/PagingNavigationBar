@@ -14,7 +14,6 @@
 		A72793DC1B2F1008002F31D7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A72793DA1B2F1008002F31D7 /* LaunchScreen.xib */; };
 		A72793E81B2F1008002F31D7 /* PaggingNavigationBarTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A72793E71B2F1008002F31D7 /* PaggingNavigationBarTests.m */; };
 		A72793F31B303B2C002F31D7 /* PageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A72793F21B303B2C002F31D7 /* PageViewController.m */; };
-		A72793F61B3055E2002F31D7 /* PageDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = A72793F51B3055E2002F31D7 /* PageDataSource.m */; };
 		A72793F91B306B1B002F31D7 /* PageContentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A72793F81B306B1B002F31D7 /* PageContentViewController.m */; };
 		A72793FC1B30832A002F31D7 /* PagingNavbar.m in Sources */ = {isa = PBXBuildFile; fileRef = A72793FB1B30832A002F31D7 /* PagingNavbar.m */; };
 /* End PBXBuildFile section */
@@ -43,8 +42,6 @@
 		A72793E71B2F1008002F31D7 /* PaggingNavigationBarTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaggingNavigationBarTests.m; sourceTree = "<group>"; };
 		A72793F11B303B2C002F31D7 /* PageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageViewController.h; sourceTree = "<group>"; };
 		A72793F21B303B2C002F31D7 /* PageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageViewController.m; sourceTree = "<group>"; };
-		A72793F41B3055E2002F31D7 /* PageDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageDataSource.h; sourceTree = "<group>"; };
-		A72793F51B3055E2002F31D7 /* PageDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageDataSource.m; sourceTree = "<group>"; };
 		A72793F71B306B1B002F31D7 /* PageContentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageContentViewController.h; sourceTree = "<group>"; };
 		A72793F81B306B1B002F31D7 /* PageContentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PageContentViewController.m; sourceTree = "<group>"; };
 		A72793FA1B30832A002F31D7 /* PagingNavbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PagingNavbar.h; sourceTree = "<group>"; };
@@ -92,8 +89,6 @@
 			children = (
 				A72793CF1B2F1008002F31D7 /* AppDelegate.h */,
 				A72793D01B2F1008002F31D7 /* AppDelegate.m */,
-				A72793F41B3055E2002F31D7 /* PageDataSource.h */,
-				A72793F51B3055E2002F31D7 /* PageDataSource.m */,
 				A72793F11B303B2C002F31D7 /* PageViewController.h */,
 				A72793F21B303B2C002F31D7 /* PageViewController.m */,
 				A72793F71B306B1B002F31D7 /* PageContentViewController.h */,
@@ -238,7 +233,6 @@
 				A72793CE1B2F1008002F31D7 /* main.m in Sources */,
 				A72793F91B306B1B002F31D7 /* PageContentViewController.m in Sources */,
 				A72793F31B303B2C002F31D7 /* PageViewController.m in Sources */,
-				A72793F61B3055E2002F31D7 /* PageDataSource.m in Sources */,
 				A72793FC1B30832A002F31D7 /* PagingNavbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
