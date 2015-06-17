@@ -8,72 +8,81 @@
 
 #import "PagingNavbar.h"
 
-static const CGFloat PagingNavbarDefaultOffset = 100.f;
+// Расстояние между центром NavigationBar и точкой из которой будет появлятся надписать
+// Расстояние между Label'ами
+static const CGFloat PagingNavbarDefaultHorOffset = 100.f;
 
 @interface PagingNavbar ()
 
-@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGFloat screenWidth;
+@property (nonatomic, weak) UIPageViewController *pageViewController;
 
 @end
 
 @implementation PagingNavbar
 
-#pragma mark - Lifecycle
+#pragma mark - Setup
 
-- (instancetype)initWithTitles:(NSArray *)titles {
+- (instancetype)init {
+    return [self initWithTitles:@[] pageViewController:nil];
+}
+
+- (instancetype)initWithTitles:(NSArray *)titles
+            pageViewController:(UIPageViewController *)pageViewController {
     if (self = [super init]) {
         _titles = titles;
         
-        _width = [[UIScreen mainScreen] bounds].size.width;
+        _screenWidth = [[UIScreen mainScreen] bounds].size.width;
         
         [self setupTitleLabels];
         
-        [self addSubview:self.pageControl];
+        [self setupPageControl];
+        
+        [self setupScrollViewDelegate];
     }
     return self;
 }
 
 - (void)setupTitleLabels {
+    _titleLabels = [NSMutableArray array];
     for (NSString *title in _titles) {
         UILabel *titleLabel = [[UILabel alloc] init];
-        titleLabel.frame = CGRectMake(0, 8, _width, 20);
+        titleLabel.frame = CGRectMake(0, 8, _screenWidth, 20);
         titleLabel.text = title;
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        [self.titleLabels addObject:titleLabel];
+        [_titleLabels addObject:titleLabel];
         [self addSubview:titleLabel];
     }
 }
 
-#pragma mark - Getters
-
-- (UIPageControl *)pageControl {
-    if (!_pageControl) {
-//        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(_width/2, 35, 0, 0)];
-        _pageControl = [UIPageControl new];
-        _pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-        _pageControl.frame = (CGRect){_width/2, 25, CGRectGetWidth(self.bounds), 20};
-        _pageControl.backgroundColor = [UIColor whiteColor];
-        _pageControl.numberOfPages = _titles.count;
-        _pageControl.currentPage = 0;
-        _pageControl.currentPageIndicatorTintColor = [UIColor grayColor];
-        _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-    }
-    return _pageControl;
+- (void)setupPageControl {
+    _pageControl = [UIPageControl new];
+    _pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    _pageControl.frame = CGRectMake(_screenWidth/2, 25, CGRectGetWidth(self.bounds), 20);
+    _pageControl.backgroundColor = [UIColor whiteColor];
+    _pageControl.numberOfPages = _titles.count;
+    _pageControl.currentPage = 0;
+    _pageControl.currentPageIndicatorTintColor = [UIColor grayColor];
+    _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
+    [self addSubview:_pageControl];
 }
 
-- (NSMutableArray *)titleLabels {
-    if (!_titleLabels) {
-        _titleLabels = [NSMutableArray array];
+- (void)setupScrollViewDelegate {
+    for (UIView *view in _pageViewController.view.subviews) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = (UIScrollView *)view;
+            scrollView.delegate = self;
+        }
     }
-    return _titleLabels;
 }
+
+#pragma mark - Setters
 
 - (void)setCurrentPage:(NSInteger)currentPage {
+    NSLog(@"currentPage = %lu", (unsigned long) currentPage);
     _currentPage = currentPage;
     _pageControl.currentPage = currentPage;
 }
-
-#pragma mark - Animate
 
 - (void)setContentOffset:(CGPoint)contentOffset {
     _contentOffset = contentOffset;
@@ -85,17 +94,17 @@ static const CGFloat PagingNavbarDefaultOffset = 100.f;
             
             // frame
             CGRect titleLabelFrame = titleLabel.frame;
-            titleLabelFrame.origin.x = PagingNavbarDefaultOffset * (idx - xOffset / _width - _currentPage + 1);
+            titleLabelFrame.origin.x = PagingNavbarDefaultHorOffset * (idx - xOffset / _screenWidth - _currentPage + 1);
             titleLabel.frame = titleLabelFrame;
-            NSLog(@"origin.x = %f", titleLabelFrame.origin.x);
+//            NSLog(@"origin.x = %f", titleLabelFrame.origin.x);
             
             // alpha
             CGFloat alpha;
             CGFloat x = titleLabel.frame.origin.x;
             if (x > 0) {
-                alpha = -x / PagingNavbarDefaultOffset + 1;
+                alpha = -x / PagingNavbarDefaultHorOffset + 1;
             } else {
-                alpha =  x / PagingNavbarDefaultOffset + 1;
+                alpha =  x / PagingNavbarDefaultHorOffset + 1;
             }
             titleLabel.alpha = alpha;
         }
@@ -105,7 +114,7 @@ static const CGFloat PagingNavbarDefaultOffset = 100.f;
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSLog(@"offset = %f", scrollView.contentOffset.x);
+//    NSLog(@"offset = %f", scrollView.contentOffset.x);
     [self setContentOffset:scrollView.contentOffset];
 }
 

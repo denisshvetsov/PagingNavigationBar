@@ -20,6 +20,7 @@
 
 @property (nonatomic, assign) CGPoint contentOffset;
 
-- (instancetype)initWithTitles:(NSArray *)titles;
+- (instancetype)initWithTitles:(NSArray *)titles
+            pageViewController:(UIPageViewController *)pageViewController;
 
 @end

@@ -26,21 +26,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSArray *titles = @[@"Recent", @"Day", @"Week", @"Month"];
-    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles];
+    NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple"];
+    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles
+                                      pageViewController:_pageViewController];
     [self.navigationController.navigationBar addSubview:_pagingNavbar];
     
     [self setupViewControllers];
     
     [self setupPageViewController];
     
-    // Because Apple doesn't provide access to UIPanGestureRecognizer from UIPageViewController when transition style is Scroll
-    for (UIView *view in _pageViewController.view.subviews) {
-        if ([view isKindOfClass:[UIScrollView class]]) {
-            UIScrollView *scrollView = (UIScrollView *)view;
-            scrollView.delegate = _pagingNavbar;
-        }
-    }
+//    // Because Apple doesn't provide access to UIPanGestureRecognizer from UIPageViewController when transition style is Scroll
+//    for (UIView *view in _pageViewController.view.subviews) {
+//        if ([view isKindOfClass:[UIScrollView class]]) {
+//            UIScrollView *scrollView = (UIScrollView *)view;
+//            scrollView.delegate = _pagingNavbar;
+//        }
+//    }
 }
 
 #pragma mark - setupViewControllers
@@ -63,6 +64,7 @@
                            navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal
                            options:nil];
     _pageViewController.dataSource = self;
+    _pageViewController.delegate = self;
     _pageViewController.view.backgroundColor = [UIColor whiteColor];
     
     NSArray *startViewController = @[_contentViewControllers[0]];
@@ -88,14 +90,23 @@
     
     NSUInteger index = [_contentViewControllers indexOfObject:(PageContentViewController *)viewController];
     
-    _pagingNavbar.currentPage = index;
+    NSLog(@"Before 1 %lu", (unsigned long) index);
+    
+//    _pagingNavbar.currentPage = index;
     
     if (index == 0 || index == NSNotFound) {
+        NSLog(@"Before 2 %lu", (unsigned long) index);
         return nil;
     }
     
+    NSLog(@"Before 3 %lu", (unsigned long) index);
+    
     index--;
-
+    
+//    _pagingNavbar.currentPage = index;
+    
+    NSLog(@"Before 4 %lu", (unsigned long) index);
+    
     return [self viewControllerAtIndex:index];
 }
 
@@ -104,22 +115,44 @@
 
     NSUInteger index = [_contentViewControllers indexOfObject:(PageContentViewController *)viewController];
     
-    _pagingNavbar.currentPage = index;
+    NSLog(@"After 1 %lu", (unsigned long) index);
+    
+//    _pagingNavbar.currentPage = index;
     
     if (index + 1 == _contentViewControllers.count || index == NSNotFound) {
+        NSLog(@"After 2 %lu", (unsigned long) index);
         return nil;
     }
     
+    NSLog(@"After 3 %lu", (unsigned long) index);
+    
     index++;
+    
+//    _pagingNavbar.currentPage = index;
+    
+    NSLog(@"After 4 %lu", (unsigned long) index);
     
     return [self viewControllerAtIndex:index];
 }
 
 - (PageContentViewController *)viewControllerAtIndex:(NSUInteger)index {
+//    _pagingNavbar.currentPage = index;
     if (_contentViewControllers.count == 0 || index >= _contentViewControllers.count) {
         return nil;
     }
     return _contentViewControllers[index];
+}
+
+#pragma mark - UIPageViewControllerDelegate
+
+- (void)pageViewController:(UIPageViewController *)pageViewController
+        didFinishAnimating:(BOOL)finished
+   previousViewControllers:(NSArray *)previousViewControllers
+       transitionCompleted:(BOOL)completed {
+    if (completed) {
+        PageContentViewController *newController = (PageContentViewController *)[self.pageViewController.viewControllers firstObject];
+        _pagingNavbar.currentPage = [_contentViewControllers indexOfObject:newController];
+    }
 }
 
 @end
