@@ -30,15 +30,10 @@
     
     [self setupPageViewController];
     
-    NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple", @"Gray", @"Orange", @"Cyan", @"Brown", @"Blue"];
-    
-    // Setup PagingNavbar
-    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles
-                                      pageViewController:_pageViewController];
-    [self.navigationController.navigationBar addSubview:_pagingNavbar];
+    [self setupPagingNavbar];
 }
 
-#pragma mark - setupViewControllers
+#pragma mark - Setup
 
 - (void)setupViewControllers {
     _contentViewControllers = @[
@@ -53,8 +48,6 @@
                                 [[PageContentViewController alloc] initWithColor:[UIColor blueColor]]
                                ];
 }
-
-#pragma mark - setupPageViewController
 
 - (void)setupPageViewController {
     _pageViewController = [[UIPageViewController alloc]
@@ -74,6 +67,14 @@
     [self addChildViewController:_pageViewController];
     [self.view addSubview:_pageViewController.view];
     [_pageViewController didMoveToParentViewController:self];
+}
+
+- (void)setupPagingNavbar {
+    NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple", @"Gray", @"Orange", @"Cyan", @"Brown", @"Blue"];
+
+    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles
+                                      pageViewController:_pageViewController];
+    [self.navigationController.navigationBar addSubview:_pagingNavbar];
 }
 
 - (void)didReceiveMemoryWarning {
