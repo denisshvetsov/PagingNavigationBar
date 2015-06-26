@@ -35,10 +35,6 @@
     [self setupScrollViewDelegate];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-    NSLog(@"viewDidLayoutSubviews width = %f", self.navigationItem.titleView.frame.size.width);
-}
-
 #pragma mark - Setup
 
 - (void)setupViewControllers {
@@ -78,7 +74,7 @@
 - (void)setupPagingNavbar {
     NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple", @"Gray", @"Orange", @"Cyan", @"Brown", @"Blue"];
 
-    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles horizontalSpace:50];
+    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles horizontalSpace:100];
     self.navigationItem.titleView = _pagingNavbar;
 }
 
