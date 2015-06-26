@@ -10,7 +10,7 @@
 #import "PageContentViewController.h"
 #import "PagingNavbar.h"
 
-@interface PageViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
+@interface PageViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIPageViewController *pageViewController;
 @property (nonatomic, strong) NSArray *contentViewControllers;
@@ -31,6 +31,12 @@
     [self setupPageViewController];
     
     [self setupPagingNavbar];
+    
+    [self setupScrollViewDelegate];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    NSLog(@"viewDidLayoutSubviews width = %f", self.navigationItem.titleView.frame.size.width);
 }
 
 #pragma mark - Setup
@@ -72,9 +78,17 @@
 - (void)setupPagingNavbar {
     NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple", @"Gray", @"Orange", @"Cyan", @"Brown", @"Blue"];
 
-    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles
-                                      pageViewController:_pageViewController];
-    [self.navigationController.navigationBar addSubview:_pagingNavbar];
+    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles];
+    self.navigationItem.titleView = _pagingNavbar;
+}
+
+- (void)setupScrollViewDelegate {
+    for (UIView *view in _pageViewController.view.subviews) {
+        if ([view isKindOfClass:[UIScrollView class]]) {
+            UIScrollView *scrollView = (UIScrollView *)view;
+            scrollView.delegate = self;
+        }
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -130,6 +144,12 @@
             (PageContentViewController *)[self.pageViewController.viewControllers firstObject];
         _pagingNavbar.currentPage = [_contentViewControllers indexOfObject:currentController];
     }
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    _pagingNavbar.contentOffset = scrollView.contentOffset;
 }
 
 @end

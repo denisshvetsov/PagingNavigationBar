@@ -10,12 +10,13 @@
 
 /**
  * Rules:
- * 1. Use only initWithTitles:pageViewController: initializer
+ * 1. Use only `initWithTitles:pageViewController:` initializer
  * 2. Add as subview to your NavigationBar
- * 3. Set currentPage on pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:
+ * 3. Set currentPage on `pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:`
  *    method of your UIPageViewControllerDelegate
+ * 4. Set contentOffset on `scrollViewDidScroll:` method on your UIScrollViewDelegate of your UIPageViewController
  */
-@interface PagingNavbar : UIView <UIScrollViewDelegate>
+@interface PagingNavbar : UIView
 
 /**
  * Need to set on pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:
@@ -31,11 +32,8 @@
 
 @property (nonatomic, readonly) UIPageControl *pageControl;
 
+- (instancetype)init NS_UNAVAILABLE; 
 
-/**
- * Use only this initializer
- */
-- (instancetype)initWithTitles:(NSArray *)titles
-            pageViewController:(UIPageViewController *)pageViewController;
+- (instancetype)initWithTitles:(NSArray *)titles;
 
 @end

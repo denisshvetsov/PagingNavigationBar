@@ -11,9 +11,14 @@
 // Horizontal space between titleLabels in points
 static const CGFloat PagingNavbarHorizontalSpace = 100.f;
 
+static const CGFloat PagingNavbarTitleLabelsOriginY = -12.f;
+static const CGFloat PagingNavbarPageControlOriginY = 14.f;
+
 @interface PagingNavbar ()
 
 @property (nonatomic, assign) CGFloat screenWidth;
+
+@property (nonatomic, assign) CGFloat maxTitleLabelWidth;
 
 @end
 
@@ -26,55 +31,75 @@ static const CGFloat PagingNavbarHorizontalSpace = 100.f;
     return nil;
 }
 
-- (instancetype)initWithTitles:(NSArray *)titles
-            pageViewController:(UIPageViewController *)pageViewController {
-    if (self = [super init]) {
+- (instancetype)initWithTitles:(NSArray *)titles {
+    if (self = [super initWithFrame:CGRectZero]) {
         _titles = titles;
         
         _screenWidth = [[UIScreen mainScreen] bounds].size.width;
+        
+        _maxTitleLabelWidth = 0.f;
         
         [self setupTitleLabels];
         
         [self setupPageControl];
         
-        [self setupScrollViewDelegateForPageViewController:pageViewController];
     }
     return self;
 }
 
 #pragma mark - Setup
 
+//- (void)layoutSubviews {
+//
+//    _PagingNavbarHorizontalSpace = self.frame.size.width/2;
+//    
+//    NSLog(@"layoutSubviews frame.width = %f", self.frame.size.width);
+//}
+
 - (void)setupTitleLabels {
     _titleLabels = [NSMutableArray array];
     for (NSString *title in _titles) {
-        UILabel *titleLabel = [[UILabel alloc] init];
-        titleLabel.frame = CGRectMake(0, 8, _screenWidth, 20);
+        UILabel *titleLabel = [UILabel new];
         titleLabel.text = title;
         titleLabel.textAlignment = NSTextAlignmentCenter;
+        
+        CGRect titleLabelFrame = titleLabel.frame;
+        titleLabelFrame.origin.y = PagingNavbarTitleLabelsOriginY;
+        titleLabel.frame = titleLabelFrame;
+        
+        [titleLabel sizeToFit];
+        
+        if (titleLabel.frame.size.width > _maxTitleLabelWidth) {
+            _maxTitleLabelWidth = titleLabel.frame.size.width;
+        }
+        
         [_titleLabels addObject:titleLabel];
         [self addSubview:titleLabel];
     }
+    
+    CGRect frame = self.frame;
+    NSLog(@"frame.width = %f", frame.size.width);
+    NSLog(@"bounds.width = %f", self.bounds.size.width);
+    NSLog(@"maxTitleLabelWidth= %f", _maxTitleLabelWidth);
+    frame.size.width = _maxTitleLabelWidth;
+    self.frame = frame;
 }
 
 - (void)setupPageControl {
     _pageControl = [UIPageControl new];
     _pageControl.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
-    _pageControl.frame = CGRectMake(_screenWidth/2, 25, CGRectGetWidth(self.bounds), 20);
+    
+    CGRect pageControlFrame = _pageControl.frame;
+    pageControlFrame.origin.y = PagingNavbarPageControlOriginY;
+    pageControlFrame.origin.x += self.frame.size.width/2;
+    _pageControl.frame = pageControlFrame;
+    
     _pageControl.backgroundColor = [UIColor whiteColor];
     _pageControl.numberOfPages = _titles.count;
     _pageControl.currentPage = 0;
     _pageControl.currentPageIndicatorTintColor = [UIColor grayColor];
     _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
     [self addSubview:_pageControl];
-}
-
-- (void)setupScrollViewDelegateForPageViewController:(UIPageViewController *)pageViewController {
-    for (UIView *view in pageViewController.view.subviews) {
-        if ([view isKindOfClass:[UIScrollView class]]) {
-            UIScrollView *scrollView = (UIScrollView *)view;
-            scrollView.delegate = self;
-        }
-    }
 }
 
 #pragma mark - Setters
@@ -94,26 +119,21 @@ static const CGFloat PagingNavbarHorizontalSpace = 100.f;
             
             // frame
             CGRect titleLabelFrame = titleLabel.frame;
-            titleLabelFrame.origin.x = PagingNavbarHorizontalSpace * (idx - xOffset / _screenWidth - _currentPage + 1);
+//            NSLog(@"frame.width = %f", self.frame.size.width);
+            titleLabelFrame.origin.x = self.frame.size.width/2 - titleLabelFrame.size.width/2 + PagingNavbarHorizontalSpace * (idx - xOffset / _screenWidth - _currentPage + 1);
             titleLabel.frame = titleLabelFrame;
             
             // alpha
             CGFloat alpha;
-            CGFloat x = titleLabel.frame.origin.x;
-            if (x > 0) {
-                alpha = -x / PagingNavbarHorizontalSpace + 1;
+            CGFloat xCenter = titleLabel.frame.origin.x + titleLabelFrame.size.width/2 - self.frame.size.width/2;
+            if (xCenter > 0) {
+                alpha = -xCenter / PagingNavbarHorizontalSpace + 1;
             } else {
-                alpha =  x / PagingNavbarHorizontalSpace + 1;
+                alpha =  xCenter / PagingNavbarHorizontalSpace + 1;
             }
             titleLabel.alpha = alpha;
         }
     }];
-}
-
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    [self setContentOffset:scrollView.contentOffset];
 }
 
 @end
