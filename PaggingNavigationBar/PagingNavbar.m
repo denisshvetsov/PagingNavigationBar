@@ -8,9 +8,7 @@
 
 #import "PagingNavbar.h"
 
-// Horizontal space between titleLabels in points
-static const CGFloat PagingNavbarHorizontalSpace = 100.f;
-
+static const CGFloat PagingNavbarDefaultTitleLabelsHorizontalSpace = 100.f;
 static const CGFloat PagingNavbarTitleLabelsOriginY = -12.f;
 static const CGFloat PagingNavbarPageControlOriginY = 14.f;
 
@@ -18,7 +16,7 @@ static const CGFloat PagingNavbarPageControlOriginY = 14.f;
 
 @property (nonatomic, assign) CGFloat screenWidth;
 
-@property (nonatomic, assign) CGFloat maxTitleLabelWidth;
+@property (nonatomic, assign) CGFloat titleLabelsHorizontalSpace;
 
 @end
 
@@ -32,29 +30,26 @@ static const CGFloat PagingNavbarPageControlOriginY = 14.f;
 }
 
 - (instancetype)initWithTitles:(NSArray *)titles {
+    return [self initWithTitles:titles horizontalSpace:PagingNavbarDefaultTitleLabelsHorizontalSpace];
+}
+
+
+- (instancetype)initWithTitles:(NSArray *)titles horizontalSpace:(CGFloat)space {
     if (self = [super initWithFrame:CGRectZero]) {
         _titles = titles;
         
         _screenWidth = [[UIScreen mainScreen] bounds].size.width;
         
-        _maxTitleLabelWidth = 0.f;
+        _titleLabelsHorizontalSpace = space;
         
         [self setupTitleLabels];
         
         [self setupPageControl];
-        
     }
     return self;
 }
 
 #pragma mark - Setup
-
-//- (void)layoutSubviews {
-//
-//    _PagingNavbarHorizontalSpace = self.frame.size.width/2;
-//    
-//    NSLog(@"layoutSubviews frame.width = %f", self.frame.size.width);
-//}
 
 - (void)setupTitleLabels {
     _titleLabels = [NSMutableArray array];
@@ -69,20 +64,9 @@ static const CGFloat PagingNavbarPageControlOriginY = 14.f;
         
         [titleLabel sizeToFit];
         
-        if (titleLabel.frame.size.width > _maxTitleLabelWidth) {
-            _maxTitleLabelWidth = titleLabel.frame.size.width;
-        }
-        
         [_titleLabels addObject:titleLabel];
         [self addSubview:titleLabel];
     }
-    
-    CGRect frame = self.frame;
-    NSLog(@"frame.width = %f", frame.size.width);
-    NSLog(@"bounds.width = %f", self.bounds.size.width);
-    NSLog(@"maxTitleLabelWidth= %f", _maxTitleLabelWidth);
-    frame.size.width = _maxTitleLabelWidth;
-    self.frame = frame;
 }
 
 - (void)setupPageControl {
@@ -91,7 +75,6 @@ static const CGFloat PagingNavbarPageControlOriginY = 14.f;
     
     CGRect pageControlFrame = _pageControl.frame;
     pageControlFrame.origin.y = PagingNavbarPageControlOriginY;
-    pageControlFrame.origin.x += self.frame.size.width/2;
     _pageControl.frame = pageControlFrame;
     
     _pageControl.backgroundColor = [UIColor whiteColor];
@@ -119,17 +102,16 @@ static const CGFloat PagingNavbarPageControlOriginY = 14.f;
             
             // frame
             CGRect titleLabelFrame = titleLabel.frame;
-//            NSLog(@"frame.width = %f", self.frame.size.width);
-            titleLabelFrame.origin.x = self.frame.size.width/2 - titleLabelFrame.size.width/2 + PagingNavbarHorizontalSpace * (idx - xOffset / _screenWidth - _currentPage + 1);
+            titleLabelFrame.origin.x = - titleLabelFrame.size.width/2 + _titleLabelsHorizontalSpace * (idx - xOffset / _screenWidth - _currentPage + 1);
             titleLabel.frame = titleLabelFrame;
             
             // alpha
             CGFloat alpha;
             CGFloat xCenter = titleLabel.frame.origin.x + titleLabelFrame.size.width/2 - self.frame.size.width/2;
             if (xCenter > 0) {
-                alpha = -xCenter / PagingNavbarHorizontalSpace + 1;
+                alpha = -xCenter / _titleLabelsHorizontalSpace + 1;
             } else {
-                alpha =  xCenter / PagingNavbarHorizontalSpace + 1;
+                alpha =  xCenter / _titleLabelsHorizontalSpace + 1;
             }
             titleLabel.alpha = alpha;
         }

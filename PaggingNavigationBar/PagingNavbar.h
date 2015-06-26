@@ -10,18 +10,15 @@
 
 /**
  * Rules:
- * 1. Use only `initWithTitles:pageViewController:` initializer
- * 2. Add as subview to your NavigationBar
- * 3. Set currentPage on `pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:`
+ * 1. Use `initWithTitles:` or `initWithTitles:horizontalSpace:` initializers
+ * 2. horizontalSpace is space between centers of Labels, default value is 100
+ * 3. Add as titleView of your UINavigationItem
+ * 4. Set currentPage on `pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:`
  *    method of your UIPageViewControllerDelegate
- * 4. Set contentOffset on `scrollViewDidScroll:` method on your UIScrollViewDelegate of your UIPageViewController
+ * 5. Set contentOffset on `scrollViewDidScroll:` method on your UIScrollViewDelegate of your UIPageViewController
  */
 @interface PagingNavbar : UIView
 
-/**
- * Need to set on pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:
- * method of your UIPageViewControllerDelegate
- */
 @property (nonatomic, assign) NSInteger currentPage;
 
 @property (nonatomic, strong) NSArray *titles;
@@ -35,5 +32,7 @@
 - (instancetype)init NS_UNAVAILABLE; 
 
 - (instancetype)initWithTitles:(NSArray *)titles;
+
+- (instancetype)initWithTitles:(NSArray *)titles horizontalSpace:(CGFloat)space;
 
 @end

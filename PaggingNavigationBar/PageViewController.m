@@ -78,7 +78,7 @@
 - (void)setupPagingNavbar {
     NSArray *titles = @[@"Red", @"Yellow", @"Green", @"Purple", @"Gray", @"Orange", @"Cyan", @"Brown", @"Blue"];
 
-    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles];
+    _pagingNavbar = [[PagingNavbar alloc] initWithTitles:titles horizontalSpace:50];
     self.navigationItem.titleView = _pagingNavbar;
 }
 
